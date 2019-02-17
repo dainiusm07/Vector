@@ -68,14 +68,18 @@ double mediana (std::vector<int> temp_paz,int n){
          return 1.0*(temp_paz[n/2]);
 };
 
-void spausdinimas (int stud_nr,std::vector<Studentas> A,int vid_pasirinkimas) { 
+void spausdinimas (int stud_nr,std::vector<Studentas> A,int vid_pasirinkimas) {
+
     int max_vardas=7, max_pavarde=9; // Pradzioj zodziai Vardas ir Pavarde yra didziausi
+
     for (int i=0;i<=stud_nr;i++){    // Randu ilgiausia varda ir pavarde
         if (max_vardas<A[i].vardas.length()+1)
             max_vardas=A[i].vardas.length()+1;
         if (max_pavarde<A[i].pavarde.length()+1)
             max_pavarde=A[i].pavarde.length()+1;
     }
+
+    new_line();
     printf("%*s", -max_vardas, "Vardas");
     printf("%*s", -max_pavarde, "Pavarde");
 
@@ -100,15 +104,11 @@ void spausdinimas (int stud_nr,std::vector<Studentas> A,int vid_pasirinkimas) {
     else{    // Spausdinimas skaicius duomenis is failo
         int sk=0;
         while(sk!=stud_nr+1){
-            if (all_letters(A[sk].vardas)==1 and all_letters(A[sk].pavarde)==1){
             printf("\n%*s", -max_vardas, A[sk].vardas.c_str()); //.c_str, nes kitaip printina pievas
             printf("%*s", -max_pavarde, A[sk].pavarde.c_str());
             printf("%-17.2f", A[sk].galutinis);
             printf("%-17.2f", A[sk].galutinis2);
             sk++;
-            }
-            else
-                sk++;
         }
     }
 }
@@ -194,13 +194,13 @@ int main () {
                         std::cin>>temp;
                     if (temp=="1") {
                         new_line();
-                        std::cout << "Ivedinek skaicius 1-10, noredamas sustoti ivesk betkoki kita skaiciu." << std::endl;
+                        std::cout << "Ivedinek skaicius 0-10, noredamas sustoti ivesk betkoki kita skaiciu." << std::endl;
                         while(true){
                             std::cin>>temp;
                             if(is_digits(temp)==true)
                             {
                                 int ivestis = std::stoi(temp);
-                                if (ivestis>0 and ivestis<11){
+                                if (ivestis>=0 and ivestis<=10){
                                     pazymiai.push_back(int());
                                     pazymiai[sk]=ivestis;
                                     sk++;
@@ -228,7 +228,7 @@ int main () {
                             if (ivestis>0){
                                 for (int i=0;i<ivestis;i++){
                                     pazymiai.push_back(int());
-                                    pazymiai[sk]=int(round(1+1.0*rand()/RAND_MAX*9));
+                                    pazymiai[sk]=int(round(1.0*rand()/RAND_MAX*10));
                                     sk++;
                                 }
                                 break;
@@ -269,7 +269,7 @@ int main () {
                         }
                         
 
-                        if (ivestis<0 or ivestis>10){ // Per mazas skaicius netinka, 0 kiek zinau cia jau tinka, bet daugiau 10 tai tikrai ne :D
+                        if (ivestis<0 or ivestis>10){ // Per mazas ar per didelis skaicius netinka
                             std::cout << erroras << std::endl;
                         }
                         else
@@ -307,55 +307,65 @@ int main () {
     }
     else if (ivedimo_pasirinkimas==2)
     {
-        std::string eilute;
+        std::string eilute,vardas,pavarde;
         std::ifstream in_file ("kursiokai.txt");
         if (in_file.good()){
             while(std::getline(in_file,eilute)){  // Nuskaito po visa eilute txt faile
                 A.push_back(Studentas());
                 std::istringstream in_line(eilute); // Skaitymas is eilutes
-                stud_nr++;
 
-                in_line >> A[stud_nr].vardas >> A[stud_nr].pavarde;
-                convert_to_proper_format(A[stud_nr].vardas);
-                convert_to_proper_format(A[stud_nr].pavarde);
+                in_line >> vardas >> pavarde;
+                if(all_letters(vardas) and all_letters(pavarde)){
+                    stud_nr++;
+                    A[stud_nr].vardas=vardas;
+                    A[stud_nr].pavarde=pavarde;
 
-                int sk=0;
-                std::vector<int> pazymiai;
-                while(in_line>>temp){
-                    if(is_digits(temp)){
-                        int ivestis = std::stoi(temp);
-                        if (ivestis>0 and ivestis<11){
-                            pazymiai.push_back(int());
-                            pazymiai[sk]=ivestis;
-                            sk++;
+                    
+                    convert_to_proper_format(A[stud_nr].vardas);
+                    convert_to_proper_format(A[stud_nr].pavarde);
+
+                    int sk=0;
+                    std::vector<int> pazymiai;
+                    while(in_line>>temp){
+                        if(is_digits(temp)){
+                            int ivestis = std::stoi(temp);
+                            if (ivestis>=0 and ivestis<=10){
+                                pazymiai.push_back(int());
+                                pazymiai[sk]=ivestis;
+                                sk++;
+                            }
                         }
                     }
-                }
 
-                in_line.end;
+                    in_line.end;
 
-                int egz = 0;
-                if (sk>0) // Cia nes gali buti, jog neives skaiciu visai ir tada gali iseit pazymiai[-1]
-                    egz = pazymiai[sk-1]; // Paskutinis ivestas skaicius egzamino pazimys
+                    int egz = 0;
+                    if (sk>0) // Cia nes gali buti, jog neives skaiciu visai ir tada gali iseit pazymiai[-1]
+                        egz = pazymiai[sk-1]; // Paskutinis ivestas skaicius egzamino pazimys
 
-                if (sk>1){
-                    A[stud_nr].galutinis=1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz);
-                    A[stud_nr].galutinis2=1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz);
-                }
-                else
-                {
-                    A[stud_nr].galutinis=1.0*(0.6*egz);
-                    A[stud_nr].galutinis2=1.0*(0.6*egz);
+                    if (sk>1){
+                        A[stud_nr].galutinis=1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz);
+                        A[stud_nr].galutinis2=1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz);
+                    }
+                    else
+                    {
+                        A[stud_nr].galutinis=1.0*(0.6*egz);
+                        A[stud_nr].galutinis2=1.0*(0.6*egz);
+                    }
                 }
             }
             if (stud_nr>-1)
                 rikiavimas(A,stud_nr); // Ten rikiuoju o isrikiaves siunciu iskart i spausdinima
-            else
-                std::cout << "Failas yra tuscias." << std::endl;
-            
+            else{
+                new_line();
+                std::cout << "Failas yra tuscias arba ivesti duomenys yra netinkami." << std::endl;
+            }
         }
-        else
+        else{
+            new_line();
             std::cout << "Tokio failo nera." << std::endl;
+        }
+            
         
         in_file.end;
     }
