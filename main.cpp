@@ -1,128 +1,4 @@
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <string.h>
-#include <vector>
-#include <time.h>
-#include <cmath>
-#include <stdio.h>
-#include <fstream>
-#include <sstream>
-
-
-struct Studentas {
-    double galutinis=0; 
-    double galutinis2=0; // Galutiniui saugot su mediana, kadangi skaitant is failo reikia isvesti 2 galutinius
-    std::string vardas="0", // Irasiau skaicius i varda ir pavarde, kadangi taip paprasta patikrinti ar buvo faile irasyti ar ne 
-    pavarde="0";
-};
-
-const std::string erroras = "Kazkas netaip su tavo ivestais duomenimis!";
-
-bool all_letters(std::string input)
-{
-	for (int i = 0; i < input.length(); i++)
-	{
-           int uppercaseChar = toupper(input[i]); // Keicia i uppercase
-            if (uppercaseChar < 'A' || uppercaseChar > 'Z') // Tikrina ar simbolis ne A-Z
-            {
-                if (uppercaseChar!=32) // Jei tai ne tarpas returnina false
-                    return false;
-            } 
-	}
-	return true;
-};
-
-bool is_digits(const std::string &str) // Tikrinimas ar vien tik skaiciai
-{
-    return std::all_of(str.begin(), str.end(), ::isdigit);
-}
-
-void convert_to_proper_format (std::string &text) {
-    if(islower(text.at(0)))
-        text.at(0) = toupper(text.at(0)); // Keicia pirma raide i uppercase
-    for (int i=1;i<text.length();i++)
-        if(isupper(text.at(i)))
-            text.at(i) = tolower(text.at(i)); // Keicia likusiais i lowercase
-}
-
-void new_line () {
-    std::cout<< std::endl;
-};
-
-double vidurkis (std::vector<int> temp_paz,int n){
-    int sum=0;
-    for (int i=0;i<n;i++)
-        sum+=temp_paz[i];
-    return 1.0*sum/n;
-};
-
-double mediana (std::vector<int> temp_paz,int n){
-    for (int a=0;a<n-1;a++) // Rikiuoju skaicius didejimo tvarka
-        for (int i=a+1;i<n;i++)
-            if (temp_paz[i]<temp_paz[a])
-                std::swap(temp_paz[i],temp_paz[a]);
-    if (n%2==0)
-         return 1.0*(temp_paz[n/2]+temp_paz[n/2-1])/2;
-    else
-         return 1.0*(temp_paz[n/2]);
-};
-
-void spausdinimas (int stud_nr,std::vector<Studentas> A,int vid_pasirinkimas) {
-
-    int max_vardas=7, max_pavarde=9; // Pradzioj zodziai Vardas ir Pavarde yra didziausi
-
-    for (int i=0;i<=stud_nr;i++){    // Randu ilgiausia varda ir pavarde
-        if (max_vardas<A[i].vardas.length()+1)
-            max_vardas=A[i].vardas.length()+1;
-        if (max_pavarde<A[i].pavarde.length()+1)
-            max_pavarde=A[i].pavarde.length()+1;
-    }
-
-    new_line();
-    printf("%*s", -max_vardas, "Vardas");
-    printf("%*s", -max_pavarde, "Pavarde");
-
-    int ilgis=20; // Cia bruksneliam spausdinti
-    if (vid_pasirinkimas==1)
-    printf("Galutinis (Vid.)\n");
-    else if (vid_pasirinkimas==2)
-    printf("Galutinis (Med.)\n");
-    else{
-       printf("Galutinis (Vid.) Galutinis (Med.)\n");
-       ilgis=35;
-    }
-
-    for (int i=0;i<max_vardas+max_pavarde+ilgis;i++)
-        printf("-");
-    if (vid_pasirinkimas!=3) // Spausdinimas ivedus visa info rankomis
-        for (int i=0;i<=stud_nr;i++){    //Spausdinu studentu info
-            printf("\n%*s", -max_vardas, A[i].vardas.c_str()); //.c_str, nes kitaip printina pievas
-            printf("%*s", -max_pavarde, A[i].pavarde.c_str());
-            printf("%4.2f", A[i].galutinis);
-        }
-    else{    // Spausdinimas skaicius duomenis is failo
-        int sk=0;
-        while(sk!=stud_nr+1){
-            printf("\n%*s", -max_vardas, A[sk].vardas.c_str()); //.c_str, nes kitaip printina pievas
-            printf("%*s", -max_pavarde, A[sk].pavarde.c_str());
-            printf("%-17.2f", A[sk].galutinis);
-            printf("%-17.2f", A[sk].galutinis2);
-            sk++;
-        }
-    }
-}
-void rikiavimas (std::vector<Studentas> A,int n){
-    for (int i=0;i<=n;i++)
-        for(int j=i;j<=n;j++)
-            if(strcmp(A[i].vardas.c_str(),A[j].vardas.c_str())>0) // Tikrina vardus
-                std::swap(A[i],A[j]);
-            else if (strcmp(A[i].vardas.c_str(),A[j].vardas.c_str())==0)
-                if(strcmp(A[i].pavarde.c_str(),A[j].pavarde.c_str())>0)
-                    std::swap(A[i],A[j]);
-            
-    spausdinimas(n,A,3);
-}
+#include "header.h"
 
 int main () {
     srand ( time ( NULL ));
@@ -132,19 +8,28 @@ int main () {
     int ivedimo_pasirinkimas;
     new_line();
 
-    std::cout << "Kaip noretum ivesti visus duomenis?\n1- Ivesti paciam\n2- Nuskaityti is failo kursiokai.txt" << std::endl;
+    std::cout << "Kaip noretum ivesti visus duomenis?\n1- Ivesti paciam\n2- Nuskaityti is failo kursiokai.txt\n3- Sugeneruoti faila kursiokai.txt ir nuskaityti is jo" << std::endl;
     while (true){   // Laukiam kol pasirenka 1 arba 2
-        std::cin>>temp;
-        if (temp=="1"){
-            ivedimo_pasirinkimas=1;
-        break;
+        int temp_nr;
+        std::cin >> temp_nr;
+        try {
+            if (std::cin.fail()){
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+                throw "Turi ivesti skaiciu!";
+            }
+            else{
+                if (temp_nr==1 or temp_nr==2 or temp_nr==3){
+                    ivedimo_pasirinkimas=temp_nr;
+                    break;
+                }
+                else{
+                    throw "Netinkamas skaicius.";
+                }    
+            }
+        } catch (const char* e){
+            std::cout << e << std::endl;
         }
-        else if (temp=="2"){
-            ivedimo_pasirinkimas=2;
-        break;
-        }
-        else
-        std::cout<< erroras << std::endl;
     }
     std::cin.ignore(); //  Kadangi i cin ieina ir \n tai reikia ignorint, nes getline susimauna tada, galit be sito pabandyt pamatysit :)
 
@@ -369,6 +254,117 @@ int main () {
         
         in_file.end;
     }
+    else if (ivedimo_pasirinkimas==3){
+        new_line();
+        std::cout << "Kiek zmoniu turetu but sugeneruota?\n1- 10\n2- 100\n3- 1000\n4- 10000\n5- 100000\n";
+        int sk_pasirinkimas,pazymiu_sk=10; //pagal pazymiu_sk sprendzia kiek pazymiu kiekvienam generuoti
+        int zmoniu_sk=10;
+        while (true){
+            int temp_nr;
+            std::cin >> temp_nr;
+            try {
+                if (std::cin.fail()){
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+                    throw "Turi ivesti skaiciu!";
+                }
+                else{
+                    if (temp_nr>=1 and temp_nr<=5){
+                        sk_pasirinkimas=temp_nr;
+                        break;
+                    }
+                    else{
+                        throw "Netinkamas skaicius.";
+                    }    
+                }
+            } catch (const char* e){
+                std::cout << e << std::endl;
+            }
+        }
+        auto startas = std::chrono::system_clock::now();
+
+        std::ofstream toFile ("kursiokai.txt");
+        for (int i=1;i<sk_pasirinkimas;i++)
+            zmoniu_sk=zmoniu_sk*10;
+
+
+
+        for (int i=0; i<zmoniu_sk; i++){
+            toFile << "Vardas" << i+1 << " Pavarde" << i+1;
+            for (int j=0;j<=pazymiu_sk;j++)
+                toFile << " " << int(round(1.0*rand()/RAND_MAX*10));
+            toFile << "\n";
+        }
+        toFile.close();
+
+        ///----------------------------------
+
+        std::string eilute,vardas,pavarde;
+        std::ifstream in_file ("kursiokai.txt");
+        std::ofstream kietas ("kieti.txt");
+        std::ofstream vargsas ("vargsai.txt");
+        while(std::getline(in_file,eilute)){  // Nuskaito po visa eilute txt faile
+            A.push_back(Studentas());
+            std::istringstream in_line(eilute); // Skaitymas is eilutes
+
+            in_line >> vardas >> pavarde;
+            stud_nr++;
+            A[stud_nr].vardas=vardas;
+            A[stud_nr].pavarde=pavarde;
+
+            int sk=0;
+            std::vector<int> pazymiai;
+            while(in_line>>temp){
+                if(is_digits(temp)){
+                    int ivestis = std::stoi(temp);
+                    if (ivestis>=0 and ivestis<=10){
+                        pazymiai.push_back(int());
+                        pazymiai[sk]=ivestis;
+                        sk++;
+                    }
+                }
+            }
+
+            int egz = 0;
+            if (sk>0) // Cia nes gali buti, jog neives skaiciu visai ir tada gali iseit pazymiai[-1]
+                egz = pazymiai[sk-1]; // Paskutinis ivestas skaicius egzamino pazimys
+
+            if (sk>1){
+                A[stud_nr].galutinis=1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz);
+                A[stud_nr].galutinis2=1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz);
+                if (A[stud_nr].galutinis>=5 or A[stud_nr].galutinis2>=5){
+                    kietas << A[stud_nr].vardas << " " << A[stud_nr].pavarde;
+                    for (int i=0;i<sk;i++)
+                        kietas << " " << pazymiai[i];
+                    kietas << "\n";
+                }
+                else
+                {
+                    vargsas << A[stud_nr].vardas << " " << A[stud_nr].pavarde;
+                    for (int i=0;i<sk;i++)
+                        vargsas << " " << pazymiai[i];
+                    vargsas << "\n";
+                }
+                
+            }
+            else
+            {
+                A[stud_nr].galutinis=1.0*(0.6*egz);
+                A[stud_nr].galutinis2=1.0*(0.6*egz);
+            }
+
+        }
+        kietas.close();
+        vargsas.close();
+        in_file.close();
+
+        std::cout << "Studentai surusiuoti i failus kieti.txt ir vargsai.txt" << std::endl;
+        auto pabaiga = std::chrono::system_clock::now();
+        auto uztruko = std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
+
+        std::cout << "Programa uztruko - " << uztruko << " sekundziu." << std::endl;
+    }
+    
 
 return 0;
 }
