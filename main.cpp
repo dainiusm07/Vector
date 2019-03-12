@@ -1,14 +1,17 @@
 #include "header.h"
 
 int main () {
+    auto startas = std::chrono::system_clock::now();
     srand ( time ( NULL ));
     std::string temp;
-    std::vector<Studentas> A;
+    std::deque<Studentas> A;
     int stud_nr=-1; // Studento identifikacijos nr (-1 nes nera dar jokios stud, prasideda nuo 0)
     int ivedimo_pasirinkimas;
     new_line();
 
     std::cout << "Kaip noretum ivesti visus duomenis?\n1- Ivesti paciam\n2- Nuskaityti is failo kursiokai.txt\n3- Sugeneruoti faila kursiokai.txt ir nuskaityti is jo" << std::endl;
+    auto pabaiga = std::chrono::system_clock::now();
+    auto uztruko = std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
     while (true){   // Laukiam kol pasirenka 1 arba 2
         int temp_nr;
         std::cin >> temp_nr;
@@ -73,7 +76,7 @@ int main () {
 
                     new_line();
                     std::cout << "Kaip nori ivesti namu darbus rezultatus?\n1- Rankiniu budu\n2- Sugeneruoti automatiskai" << std::endl;
-                    std::vector<int> pazymiai;
+                    std::deque<int> pazymiai;
                     int sk=0; // Namu darbus kiekis
                     while(true){
                         std::cin>>temp;
@@ -111,11 +114,14 @@ int main () {
                         {
                             int ivestis = std::stoi(temp);
                             if (ivestis>0){
+                                auto startas = std::chrono::system_clock::now();
                                 for (int i=0;i<ivestis;i++){
                                     pazymiai.push_back(int());
                                     pazymiai[sk]=int(round(1.0*rand()/RAND_MAX*10));
                                     sk++;
                                 }
+                                auto pabaiga = std::chrono::system_clock::now();
+                                uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
                                 break;
                             }
                             else {
@@ -165,10 +171,13 @@ int main () {
                     }
 
                     double vid;
+                    auto startas = std::chrono::system_clock::now();
                     if (vid_pasirinkimas==1)
                         vid=vidurkis(pazymiai,sk);
                     else
                         vid=mediana(pazymiai,sk);
+                    auto pabaiga = std::chrono::system_clock::now();
+                    uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
                     
 
                     A[stud_nr].galutinis=1.0*(0.4*vid+0.6*egz);
@@ -184,7 +193,10 @@ int main () {
                 if (stud_nr==-1)
                     std::cout << "Irasyk duomenis bent apie 1 studenta!"<< std::endl;
                 else{
+                    auto startas = std::chrono::system_clock::now();
                     spausdinimas(stud_nr,A,vid_pasirinkimas);
+                    auto pabaiga = std::chrono::system_clock::now();
+                    uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
                     break;
                 }       
             }
@@ -192,6 +204,7 @@ int main () {
     }
     else if (ivedimo_pasirinkimas==2)
     {
+        auto startas = std::chrono::system_clock::now();
         std::string eilute,vardas,pavarde;
         std::ifstream in_file ("kursiokai.txt");
         if (in_file.good()){
@@ -210,7 +223,7 @@ int main () {
                     convert_to_proper_format(A[stud_nr].pavarde);
 
                     int sk=0;
-                    std::vector<int> pazymiai;
+                    std::deque<int> pazymiai;
                     while(in_line>>temp){
                         if(is_digits(temp)){
                             int ivestis = std::stoi(temp);
@@ -250,7 +263,9 @@ int main () {
             new_line();
             std::cout << "Tokio failo nera." << std::endl;
         }
-            
+
+        auto pabaiga = std::chrono::system_clock::now();
+        uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
         
         in_file.end;
     }
@@ -313,7 +328,7 @@ int main () {
             A[stud_nr].pavarde=pavarde;
 
             int sk=0;
-            std::vector<int> pazymiai;
+            std::deque<int> pazymiai;
             while(in_line>>temp){
                 if(is_digits(temp)){
                     int ivestis = std::stoi(temp);
@@ -360,11 +375,11 @@ int main () {
 
         std::cout << "Studentai surusiuoti i failus kieti.txt ir vargsai.txt" << std::endl;
         auto pabaiga = std::chrono::system_clock::now();
-        auto uztruko = std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
+        uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
 
-        std::cout << "Programa uztruko - " << uztruko << " sekundziu." << std::endl;
+        
     }
     
-
+    std::cout << "\nPrograma uztruko - " << uztruko << " sekundziu.\n" << std::endl;
 return 0;
 }

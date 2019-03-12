@@ -31,14 +31,14 @@ void new_line () {
     std::cout<< std::endl;
 };
 
-double vidurkis (std::vector<int> temp_paz,int n){
+double vidurkis (std::deque<int> temp_paz,int n){
     int sum=0;
     for (int i=0;i<n;i++)
         sum+=temp_paz[i];
     return 1.0*sum/n;
 };
 
-double mediana (std::vector<int> temp_paz,int n){
+double mediana (std::deque<int> temp_paz,int n){
     for (int a=0;a<n-1;a++) // Rikiuoju skaicius didejimo tvarka
         for (int i=a+1;i<n;i++)
             if (temp_paz[i]<temp_paz[a])
@@ -49,7 +49,7 @@ double mediana (std::vector<int> temp_paz,int n){
          return 1.0*(temp_paz[n/2]);
 };
 
-void spausdinimas (int stud_nr,std::vector<Studentas> A,int vid_pasirinkimas) {
+void spausdinimas (int stud_nr,std::deque<Studentas> A,int vid_pasirinkimas) {
 
     int max_vardas=7, max_pavarde=9; // Pradzioj zodziai Vardas ir Pavarde yra didziausi
 
@@ -93,7 +93,7 @@ void spausdinimas (int stud_nr,std::vector<Studentas> A,int vid_pasirinkimas) {
         }
     }
 }
-void rikiavimas (std::vector<Studentas> A,int n){
+void rikiavimas (std::deque<Studentas> A,int n){
     for (int i=0;i<=n;i++)
         for(int j=i;j<=n;j++)
             if(strcmp(A[i].vardas.c_str(),A[j].vardas.c_str())>0) // Tikrina vardus
