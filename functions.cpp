@@ -49,7 +49,7 @@ double mediana (std::vector<int> temp_paz,int n){
          return 1.0*(temp_paz[n/2]);
 };
 
-void spausdinimas (int stud_nr,std::deque<Studentas> A,int vid_pasirinkimas) {
+void spausdinimas (int stud_nr,std::vector<Studentas> A,int vid_pasirinkimas) {
 
     int max_vardas=7, max_pavarde=9; // Pradzioj zodziai Vardas ir Pavarde yra didziausi
 
@@ -93,7 +93,7 @@ void spausdinimas (int stud_nr,std::deque<Studentas> A,int vid_pasirinkimas) {
         }
     }
 }
-void rikiavimas (std::deque<Studentas> A,int n){
+void rikiavimas (std::vector<Studentas> A,int n){
     for (int i=0;i<=n;i++)
         for(int j=i;j<=n;j++)
             if(strcmp(A[i].vardas.c_str(),A[j].vardas.c_str())>0) // Tikrina vardus
@@ -120,8 +120,8 @@ void rikiavimas (std::deque<Studentas> A,int n){
         }
     A.clear();
 }*/
-void rusiavimas (std::deque<Studentas>& A, std::deque<Studentas>& vargsai){
-    std::deque<Studentas>::size_type i = 0;
+void rusiavimas (std::vector<Studentas>& A, std::vector<Studentas>& vargsai){
+    std::vector<Studentas>::size_type i = 0;
     while (i != A.size()) {
         if (A[i].galutinis < 5.0 && A[i].galutinis2 < 5.0) {
             vargsai.push_back(A[i]);

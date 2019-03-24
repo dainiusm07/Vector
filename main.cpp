@@ -6,7 +6,7 @@ int main () {
     std::mt19937 mt(rd());
     std::uniform_int_distribution<int> range(1, 10);
     std::string temp;
-    std::deque<Studentas> A,vargsai;
+    std::vector<Studentas> A,vargsai;
     int stud_nr=-1; // Studento identifikacijos nr (-1 nes nera dar jokios stud, prasideda nuo 0)
     int ivedimo_pasirinkimas;
     new_line();
