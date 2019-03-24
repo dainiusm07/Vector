@@ -2,7 +2,6 @@
 # define HEADER
 
 #include <iostream>
-#include <iomanip>
 #include <algorithm>
 #include <string>
 #include <string.h>
@@ -33,9 +32,9 @@ void convert_to_proper_format (std::string &text);
 void new_line ();
 double vidurkis (std::vector<int>, int);
 double mediana (std::vector<int>, int);
-void spausdinimas (int, std::vector<Studentas>, int);
-void rikiavimas (std::vector<Studentas>, int);
-void rusiavimas (std::vector<Studentas>&, std::vector<Studentas>&);
+void spausdinimas (int, std::list<Studentas>, int);
+void rikiavimas (std::list<Studentas>, int);
+void rusiavimas(std::list<Studentas>&, std::list<Studentas>&);
 
 #endif
 
