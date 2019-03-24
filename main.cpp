@@ -2,11 +2,11 @@
 
 int main () {
     auto startas = std::chrono::system_clock::now();
-    srand ( time ( NULL ));
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<int> range(1, 10);
     std::string temp;
-    std::list<Studentas> A;
-    std::list<Studentas> :: iterator it;
-    it = A.begin();
+    std::deque<Studentas> A,vargsai;
     int stud_nr=-1; // Studento identifikacijos nr (-1 nes nera dar jokios stud, prasideda nuo 0)
     int ivedimo_pasirinkimas;
     new_line();
@@ -70,12 +70,11 @@ int main () {
                 if (temp.length()-1>pos and all_letters(temp)==true) { // Tikrinu ar yra ivestas vardas ir pavarde ir nera skaiciu
                     A.push_back(Studentas()); // Pakeiciu array A dydi su kiekvienu tinkamu vardu ir pav
                     stud_nr++; // Paruosiamas nr studentui
-                    it++;
-                    it->vardas = temp.substr(0,pos);
-                    convert_to_proper_format(it->vardas);
-                    it->pavarde = temp.substr(pos+1);
-                    it->pavarde = it->pavarde.substr(0,it->pavarde.find(" ")); // Palieka 2 pirmus zodzius jei iveda daugiau nei 2
-                    convert_to_proper_format(it->pavarde);
+                    A[stud_nr].vardas = temp.substr(0,pos);
+                    convert_to_proper_format(A[stud_nr].vardas);
+                    A[stud_nr].pavarde = temp.substr(pos+1);
+                    A[stud_nr].pavarde = A[stud_nr].pavarde.substr(0,A[stud_nr].pavarde.find(" ")); // Palieka 2 pirmus zodzius jei iveda daugiau nei 2
+                    convert_to_proper_format(A[stud_nr].pavarde);
 
                     new_line();
                     std::cout << "Kaip nori ivesti namu darbus rezultatus?\n1- Rankiniu budu\n2- Sugeneruoti automatiskai" << std::endl;
@@ -120,7 +119,7 @@ int main () {
                                 auto startas = std::chrono::system_clock::now();
                                 for (int i=0;i<ivestis;i++){
                                     pazymiai.push_back(int());
-                                    pazymiai[sk]=int(round(1.0*rand()/RAND_MAX*10));
+                                    pazymiai[sk]=range(mt);
                                     sk++;
                                 }
                                 auto pabaiga = std::chrono::system_clock::now();
@@ -183,7 +182,7 @@ int main () {
                     uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
                     
 
-                    it->galutinis=1.0*(0.4*vid+0.6*egz);
+                    A[stud_nr].galutinis=1.0*(0.4*vid+0.6*egz);
                     std::cin.ignore();
                     std::cin.clear(); // Trinu visus cin, kad isvengti nesamoniu visokiu
                 }
@@ -218,13 +217,12 @@ int main () {
                 in_line >> vardas >> pavarde;
                 if(all_letters(vardas) and all_letters(pavarde)){
                     stud_nr++;
-                    it++;
-                    it->vardas=vardas;
-                    it->pavarde=pavarde;
+                    A[stud_nr].vardas=vardas;
+                    A[stud_nr].pavarde=pavarde;
 
                     
-                    convert_to_proper_format(it->vardas);
-                    convert_to_proper_format(it->pavarde);
+                    convert_to_proper_format(A[stud_nr].vardas);
+                    convert_to_proper_format(A[stud_nr].pavarde);
 
                     int sk=0;
                     std::vector<int> pazymiai;
@@ -246,13 +244,13 @@ int main () {
                         egz = pazymiai[sk-1]; // Paskutinis ivestas skaicius egzamino pazimys
 
                     if (sk>1){
-                        it->galutinis=1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz);
-                        it->galutinis2=1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz);
+                        A[stud_nr].galutinis=1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz);
+                        A[stud_nr].galutinis2=1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz);
                     }
                     else
                     {
-                        it->galutinis=1.0*(0.6*egz);
-                        it->galutinis2=1.0*(0.6*egz);
+                        A[stud_nr].galutinis=1.0*(0.6*egz);
+                        A[stud_nr].galutinis2=1.0*(0.6*egz);
                     }
                 }
             }
@@ -311,7 +309,7 @@ int main () {
         for (int i=0; i<zmoniu_sk; i++){
             toFile << "Vardas" << i+1 << " Pavarde" << i+1;
             for (int j=0;j<=pazymiu_sk;j++)
-                toFile << " " << int(round(1.0*rand()/RAND_MAX*10));
+                toFile << " " << range(mt);
             toFile << "\n";
         }
         toFile.close();
@@ -328,9 +326,8 @@ int main () {
 
             in_line >> vardas >> pavarde;
             stud_nr++;
-            it++;
-            it->vardas=vardas;
-            it->pavarde=pavarde;
+            A[stud_nr].vardas=vardas;
+            A[stud_nr].pavarde=pavarde;
 
             int sk=0;
             std::vector<int> pazymiai;
@@ -348,32 +345,29 @@ int main () {
             int egz = 0;
             if (sk>0) // Cia nes gali buti, jog neives skaiciu visai ir tada gali iseit pazymiai[-1]
                 egz = pazymiai[sk-1]; // Paskutinis ivestas skaicius egzamino pazimys
-
+            int kiet_temp=0;
+            int vargs_temp=0;
             if (sk>1){
-                it->galutinis=1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz);
-                it->galutinis2=1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz);
-                if (it->galutinis>=5 or it->galutinis2>=5){
-                    kietas <<it->vardas << " " << it->pavarde;
-                    for (int i=0;i<sk;i++)
-                        kietas << " " << pazymiai[i];
-                    kietas << "\n";
-                }
-                else
-                {
-                    vargsas << it->vardas << " " << it->pavarde;
-                    for (int i=0;i<sk;i++)
-                        vargsas << " " << pazymiai[i];
-                    vargsas << "\n";
-                }
-                
+                A[stud_nr].galutinis=1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz);
+                A[stud_nr].galutinis2=1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz);
             }
             else
             {
-                it->galutinis=1.0*(0.6*egz);
-                it->galutinis2=1.0*(0.6*egz);
+                A[stud_nr].galutinis=1.0*(0.6*egz);
+                A[stud_nr].galutinis2=1.0*(0.6*egz);
             }
 
         }
+
+        rusiavimas(A,vargsai);
+    
+        for (int i=0;i<vargsai.size();i++){
+            vargsas << vargsai[i].vardas << " " << vargsai[i].pavarde << " " << std::setprecision(5) << vargsai[i].galutinis << " " << vargsai[i].galutinis2 << std::endl;
+        }
+        for (int i=0;i<A.size();i++){
+            kietas << A[i].vardas << " " << A[i].pavarde << " " << std::setprecision(5) << A[i].galutinis << " " << A[i].galutinis2 << std::endl;
+        }
+            
         kietas.close();
         vargsas.close();
         in_file.close();

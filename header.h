@@ -2,10 +2,11 @@
 # define HEADER
 
 #include <iostream>
+#include <iomanip>
 #include <algorithm>
 #include <string>
 #include <string.h>
-#include <vector>
+#include <deque>
 #include <time.h>
 #include <cmath>
 #include <stdio.h>
@@ -14,6 +15,7 @@
 #include <limits>
 #include <chrono>
 #include <list>
+#include <random>
 
 
 struct Studentas {
@@ -31,8 +33,9 @@ void convert_to_proper_format (std::string &text);
 void new_line ();
 double vidurkis (std::vector<int>, int);
 double mediana (std::vector<int>, int);
-void spausdinimas (int, std::list<Studentas>, int);
-void rikiavimas (std::list<Studentas>, int);
+void spausdinimas (int, std::deque<Studentas>, int);
+void rikiavimas (std::deque<Studentas>, int);
+void rusiavimas (std::deque<Studentas>&, std::deque<Studentas>&);
 
 #endif
 

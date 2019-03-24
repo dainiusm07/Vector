@@ -49,15 +49,15 @@ double mediana (std::vector<int> temp_paz,int n){
          return 1.0*(temp_paz[n/2]);
 };
 
-void spausdinimas (int stud_nr,std::list<Studentas> A,int vid_pasirinkimas) {
-    std::list<Studentas> :: iterator it;
+void spausdinimas (int stud_nr,std::deque<Studentas> A,int vid_pasirinkimas) {
+
     int max_vardas=7, max_pavarde=9; // Pradzioj zodziai Vardas ir Pavarde yra didziausi
 
-    for (it = A.begin()++ ; it !=A.end(); it++){    // Randu ilgiausia varda ir pavarde
-        if (max_vardas<it->vardas.length()+1)
-            max_vardas=it->vardas.length()+1;
-        if (max_pavarde<it->pavarde.length()+1)
-            max_pavarde=it->pavarde.length()+1;
+    for (int i=0;i<=stud_nr;i++){    // Randu ilgiausia varda ir pavarde
+        if (max_vardas<A[i].vardas.length()+1)
+            max_vardas=A[i].vardas.length()+1;
+        if (max_pavarde<A[i].pavarde.length()+1)
+            max_pavarde=A[i].pavarde.length()+1;
     }
 
     new_line();
@@ -77,30 +77,56 @@ void spausdinimas (int stud_nr,std::list<Studentas> A,int vid_pasirinkimas) {
     for (int i=0;i<max_vardas+max_pavarde+ilgis;i++)
         printf("-");
     if (vid_pasirinkimas!=3) // Spausdinimas ivedus visa info rankomis
-        for (it = A.begin()++ ; it !=A.end(); it++){    //Spausdinu studentu info
-            printf("\n%*s", -max_vardas, it->vardas.c_str()); //.c_str, nes kitaip printina pievas
-            printf("%*s", -max_pavarde, it->pavarde.c_str());
-            printf("%4.2f", it->galutinis);
+        for (int i=0;i<=stud_nr;i++){    //Spausdinu studentu info
+            printf("\n%*s", -max_vardas, A[i].vardas.c_str()); //.c_str, nes kitaip printina pievas
+            printf("%*s", -max_pavarde, A[i].pavarde.c_str());
+            printf("%4.2f", A[i].galutinis);
         }
     else{    // Spausdinimas skaicius duomenis is failo
-        for (it = A.begin()++ ; it !=A.end(); it++){    //Spausdinu studentu info
-            printf("\n%*s", -max_vardas, it->vardas.c_str()); //.c_str, nes kitaip printina pievas
-            printf("%*s", -max_pavarde, it->pavarde.c_str());
-            printf("%-17.2f", it->galutinis);
-            printf("%-17.2f", it->galutinis2);
+        int sk=0;
+        while(sk!=stud_nr+1){
+            printf("\n%*s", -max_vardas, A[sk].vardas.c_str()); //.c_str, nes kitaip printina pievas
+            printf("%*s", -max_pavarde, A[sk].pavarde.c_str());
+            printf("%-17.2f", A[sk].galutinis);
+            printf("%-17.2f", A[sk].galutinis2);
+            sk++;
         }
     }
 }
-void rikiavimas (std::list<Studentas> A,int n){
-    std::list<Studentas> :: iterator it;
-    std::list<Studentas> :: iterator it2;
-    for (it = A.begin()++ ; it!=A.end(); it++)
-        for(it2 = it++ ; it2!=A.end(); it2++)
-            if(strcmp(it->vardas.c_str(),it2->vardas.c_str())>0) // Tikrina vardus
-                std::swap(it,it2);
-            else if (strcmp(it->vardas.c_str(),it2->vardas.c_str())==0)
-                if(strcmp(it->pavarde.c_str(),it2->pavarde.c_str())>0)
-                    std::swap(it,it2);
+void rikiavimas (std::deque<Studentas> A,int n){
+    for (int i=0;i<=n;i++)
+        for(int j=i;j<=n;j++)
+            if(strcmp(A[i].vardas.c_str(),A[j].vardas.c_str())>0) // Tikrina vardus
+                std::swap(A[i],A[j]);
+            else if (strcmp(A[i].vardas.c_str(),A[j].vardas.c_str())==0)
+                if(strcmp(A[i].pavarde.c_str(),A[j].pavarde.c_str())>0)
+                    std::swap(A[i],A[j]);
             
     spausdinimas(n,A,3);
+}
+/*void rusiavimas (std::vector<Studentas> &A,std::vector<Studentas> &kieti,std::vector<Studentas> &vargsai){
+    int kiet_sk=0;
+    int vargs_sk=0;
+    for (int i=0;i<A.size();i++)
+        if (A[i].galutinis>=5 or A[i].galutinis2>=5){
+            kieti.push_back(Studentas());
+            kieti[kiet_sk] = A[i];
+            kiet_sk++;
+        }
+        else{
+            vargsai.push_back(Studentas());
+            vargsai[vargs_sk] = A[i];
+            vargs_sk++;
+        }
+    A.clear();
+}*/
+void rusiavimas (std::deque<Studentas>& A, std::deque<Studentas>& vargsai){
+    std::deque<Studentas>::size_type i = 0;
+    while (i != A.size()) {
+        if (A[i].galutinis < 5.0 && A[i].galutinis2 < 5.0) {
+            vargsai.push_back(A[i]);
+            A.erase(A.begin() + i);
+        } else
+            i++;
+    }
 }
