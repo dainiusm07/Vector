@@ -1,21 +1,16 @@
 #include "header.h"
 
 int main () {
-    auto startas = std::chrono::system_clock::now();
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_int_distribution<int> range(1, 10);
     std::string temp;
-    std::list<Studentas> A,vargsai;
-    std::list<Studentas> :: iterator it;
-    it = A.begin();
+    std::vector<Studentas> A,vargsai;
     int stud_nr=-1; // Studento identifikacijos nr (-1 nes nera dar jokios stud, prasideda nuo 0)
     int ivedimo_pasirinkimas;
     new_line();
 
     std::cout << "Kaip noretum ivesti visus duomenis?\n1- Ivesti paciam\n2- Nuskaityti is failo kursiokai.txt\n3- Sugeneruoti faila kursiokai.txt ir nuskaityti is jo" << std::endl;
-    auto pabaiga = std::chrono::system_clock::now();
-    auto uztruko = std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
     while (true){   // Laukiam kol pasirenka 1 arba 2
         int temp_nr;
         std::cin >> temp_nr;
@@ -72,12 +67,11 @@ int main () {
                 if (temp.length()-1>pos and all_letters(temp)==true) { // Tikrinu ar yra ivestas vardas ir pavarde ir nera skaiciu
                     A.push_back(Studentas()); // Pakeiciu array A dydi su kiekvienu tinkamu vardu ir pav
                     stud_nr++; // Paruosiamas nr studentui
-                    it++;
-                    it->vardas = temp.substr(0,pos);
-                    convert_to_proper_format(it->vardas);
-                    it->pavarde = temp.substr(pos+1);
-                    it->pavarde = it->pavarde.substr(0,it->pavarde.find(" ")); // Palieka 2 pirmus zodzius jei iveda daugiau nei 2
-                    convert_to_proper_format(it->pavarde);
+                    A[stud_nr].SetVardas(temp.substr(0,pos));
+                    A[stud_nr].SetVardas(convert_to_proper_format(A[stud_nr].GetVardas()));
+                    A[stud_nr].SetPavarde(temp.substr(pos+1));
+                    A[stud_nr].SetPavarde(A[stud_nr].GetPavarde().substr(0,A[stud_nr].GetPavarde().find(" "))); // Palieka 2 pirmus zodzius jei iveda daugiau nei 2
+                    A[stud_nr].SetPavarde(convert_to_proper_format(A[stud_nr].GetPavarde()));
 
                     new_line();
                     std::cout << "Kaip nori ivesti namu darbus rezultatus?\n1- Rankiniu budu\n2- Sugeneruoti automatiskai" << std::endl;
@@ -119,14 +113,11 @@ int main () {
                         {
                             int ivestis = std::stoi(temp);
                             if (ivestis>0){
-                                auto startas = std::chrono::system_clock::now();
                                 for (int i=0;i<ivestis;i++){
                                     pazymiai.push_back(int());
                                     pazymiai[sk]=range(mt);
                                     sk++;
                                 }
-                                auto pabaiga = std::chrono::system_clock::now();
-                                uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
                                 break;
                             }
                             else {
@@ -176,16 +167,13 @@ int main () {
                     }
 
                     double vid;
-                    auto startas = std::chrono::system_clock::now();
                     if (vid_pasirinkimas==1)
                         vid=vidurkis(pazymiai,sk);
                     else
                         vid=mediana(pazymiai,sk);
-                    auto pabaiga = std::chrono::system_clock::now();
-                    uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
                     
 
-                    it->galutinis=1.0*(0.4*vid+0.6*egz);
+                    A[stud_nr].SetGalutinis(1.0*(0.4*vid+0.6*egz));
                     std::cin.ignore();
                     std::cin.clear(); // Trinu visus cin, kad isvengti nesamoniu visokiu
                 }
@@ -198,10 +186,7 @@ int main () {
                 if (stud_nr==-1)
                     std::cout << "Irasyk duomenis bent apie 1 studenta!"<< std::endl;
                 else{
-                    auto startas = std::chrono::system_clock::now();
                     spausdinimas(stud_nr,A,vid_pasirinkimas);
-                    auto pabaiga = std::chrono::system_clock::now();
-                    uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
                     break;
                 }       
             }
@@ -209,7 +194,6 @@ int main () {
     }
     else if (ivedimo_pasirinkimas==2)
     {
-        auto startas = std::chrono::system_clock::now();
         std::string eilute,vardas,pavarde;
         std::ifstream in_file ("kursiokai.txt");
         if (in_file.good()){
@@ -220,13 +204,12 @@ int main () {
                 in_line >> vardas >> pavarde;
                 if(all_letters(vardas) and all_letters(pavarde)){
                     stud_nr++;
-                    it++;
-                    it->vardas=vardas;
-                    it->pavarde=pavarde;
+                    A[stud_nr].SetVardas(vardas);
+                    A[stud_nr].SetPavarde(pavarde);
 
                     
-                    convert_to_proper_format(it->vardas);
-                    convert_to_proper_format(it->pavarde);
+                    A[stud_nr].SetVardas(convert_to_proper_format(A[stud_nr].GetVardas()));
+                    A[stud_nr].SetPavarde(convert_to_proper_format(A[stud_nr].GetPavarde()));
 
                     int sk=0;
                     std::vector<int> pazymiai;
@@ -248,13 +231,13 @@ int main () {
                         egz = pazymiai[sk-1]; // Paskutinis ivestas skaicius egzamino pazimys
 
                     if (sk>1){
-                        it->galutinis=1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz);
-                        it->galutinis2=1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz);
+                        A[stud_nr].SetGalutinis(1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz));
+                        A[stud_nr].SetGalutinis2(1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz));
                     }
                     else
                     {
-                        it->galutinis=1.0*(0.6*egz);
-                        it->galutinis2=1.0*(0.6*egz);
+                        A[stud_nr].SetGalutinis(1.0*(0.6*egz));
+                        A[stud_nr].SetGalutinis2(1.0*(0.6*egz));
                     }
                 }
             }
@@ -269,9 +252,7 @@ int main () {
             new_line();
             std::cout << "Tokio failo nera." << std::endl;
         }
-
-        auto pabaiga = std::chrono::system_clock::now();
-        uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
+            
         
         in_file.end;
     }
@@ -302,12 +283,11 @@ int main () {
                 std::cout << e << std::endl;
             }
         }
-        auto startas = std::chrono::system_clock::now();
+        
 
         std::ofstream toFile ("kursiokai.txt");
         for (int i=1;i<sk_pasirinkimas;i++)
             zmoniu_sk=zmoniu_sk*10;
-
 
 
         for (int i=0; i<zmoniu_sk; i++){
@@ -324,15 +304,15 @@ int main () {
         std::ifstream in_file ("kursiokai.txt");
         std::ofstream kietas ("kieti.txt");
         std::ofstream vargsas ("vargsai.txt");
+        auto startas = std::chrono::system_clock::now();
         while(std::getline(in_file,eilute)){  // Nuskaito po visa eilute txt faile
             A.push_back(Studentas());
             std::istringstream in_line(eilute); // Skaitymas is eilutes
 
             in_line >> vardas >> pavarde;
             stud_nr++;
-            it++;
-            it->vardas=vardas;
-            it->pavarde=pavarde;
+            A[stud_nr].SetVardas(vardas);
+            A[stud_nr].SetPavarde(pavarde);
 
             int sk=0;
             std::vector<int> pazymiai;
@@ -352,37 +332,45 @@ int main () {
                 egz = pazymiai[sk-1]; // Paskutinis ivestas skaicius egzamino pazimys
 
             if (sk>1){
-                it->galutinis=1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz);
-                it->galutinis2=1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz);
+                A[stud_nr].SetGalutinis(1.0*(0.4*vidurkis(pazymiai,sk-1)+0.6*egz));
+                A[stud_nr].SetGalutinis2(1.0*(0.4*mediana(pazymiai,sk-1)+0.6*egz));
             }
             else
             {
-                it->galutinis=1.0*(0.6*egz);
-                it->galutinis2=1.0*(0.6*egz);
+                A[stud_nr].SetGalutinis(1.0*(0.6*egz));
+                A[stud_nr].SetGalutinis2(1.0*(0.6*egz));
             }
 
         }
-        rusiavimas(A,vargsai);
-    
-        for (it = vargsai.begin(); it != vargsai.end(); it++){
-            vargsas << it->vardas << " " << it->pavarde << " " << it->galutinis << " " << it->galutinis2 << std::endl;
+        auto pabaiga = std::chrono::system_clock::now();
+        auto uztruko = std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
+        std::cout << "Duomenu nuskaitymas uztruko - " << uztruko << " sec." << std::endl;
+
+        startas = std::chrono::system_clock::now();
+        rusiavimas(A);
+        pabaiga = std::chrono::system_clock::now();
+        uztruko = std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
+        std::cout << "Studentu rusiavimas uztruko - " << uztruko << " sec." << std::endl;
+
+        std::vector<Studentas>::size_type i = 0;
+        while (i != vargsai.size()){
+            vargsas << vargsai[i].GetVardas() << " " << vargsai[i].GetPavarde() << " " << vargsai[i].GetGalutinis() << " " << vargsai[i].GetGalutinis2() << std::endl;
+            i++;
+        }
+        i = 0;
+         while (i != A.size()){
+            kietas << A[i].GetVardas() << " " << A[i].GetPavarde() << " " << A[i].GetGalutinis() << " " << A[i].GetGalutinis2() << std::endl;
+            i++;
         }
         
-        for (it = A.begin(); it != A.end(); it++){
-            kietas << it->vardas << " " << it->pavarde << " " << it->galutinis << " " << it->galutinis2 << std::endl;
-        }
-
+        
         kietas.close();
         vargsas.close();
         in_file.close();
 
         std::cout << "Studentai surusiuoti i failus kieti.txt ir vargsai.txt" << std::endl;
-        auto pabaiga = std::chrono::system_clock::now();
-        uztruko += std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
-
-        
     }
     
-    std::cout << "\nPrograma uztruko - " << uztruko << " sekundziu.\n" << std::endl;
+
 return 0;
 }
