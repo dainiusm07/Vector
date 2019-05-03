@@ -107,7 +107,7 @@ void rikiavimas (std::vector<Studentas> A,int n){
 }
 
 bool skola(const Studentas & i){
-    return (i.GetGalutinis() < 5 && i.GetGalutinis2() < 5);
+    return (i < 5);
 }
 
 std::vector<Studentas> rusiavimas (std::vector<Studentas>& A){

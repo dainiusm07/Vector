@@ -347,19 +347,19 @@ int main () {
         std::cout << "Duomenu nuskaitymas uztruko - " << uztruko << " sec." << std::endl;
 
         startas = std::chrono::system_clock::now();
-        rusiavimas(A);
+        vargsai = rusiavimas(A);
         pabaiga = std::chrono::system_clock::now();
         uztruko = std::chrono::duration_cast<std::chrono::duration<double> >(pabaiga - startas).count();
         std::cout << "Studentu rusiavimas uztruko - " << uztruko << " sec." << std::endl;
 
         std::vector<Studentas>::size_type i = 0;
         while (i != vargsai.size()){
-            vargsas << vargsai[i].GetVardas() << " " << vargsai[i].GetPavarde() << " " << vargsai[i].GetGalutinis() << " " << vargsai[i].GetGalutinis2() << std::endl;
+            vargsas << vargsai[i] << std::endl;
             i++;
         }
         i = 0;
          while (i != A.size()){
-            kietas << A[i].GetVardas() << " " << A[i].GetPavarde() << " " << A[i].GetGalutinis() << " " << A[i].GetGalutinis2() << std::endl;
+            kietas << A[i] << std::endl;
             i++;
         }
         
