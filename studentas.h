@@ -4,12 +4,21 @@
 #include <string>
 #include <iomanip>
 
-class Studentas{
+class Zmogus {
+    protected:
+    std::string vardas = "0",
+    pavarde = "0";
+    public:
+    std::string GetVardas () const {return vardas;}
+    void SetVardas (std::string x) {vardas = x;}
+    std::string GetPavarde () const {return pavarde;}
+    void SetPavarde (std::string x) {pavarde = x;}
+};
+
+class Studentas : public Zmogus{
     private:
     double galutinis;
     double galutinis2;
-    std::string vardas="0",
-    pavarde="0";
     public:
     Studentas () {}
     double GetGalutinis () const {return galutinis;}
@@ -75,6 +84,16 @@ class Studentas{
             return 1;
         }
     }
+    Studentas& operator = (const Studentas& stud) {
+        if (&stud == this)
+            return *this;
+        vardas = stud.GetVardas();
+        pavarde = stud.GetPavarde();
+        galutinis = stud.GetGalutinis();
+        galutinis2 = stud.GetGalutinis2();
+
+        return *this;
+        }
 };
 
 #endif
