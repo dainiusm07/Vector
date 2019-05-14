@@ -1,34 +1,44 @@
-# ifndef HEADER
-# define HEADER
+# ifndef HEADER_H
+# define HEADER_H
 
-#include "studentas.h"
 #include <iostream>
-#include <algorithm>
-#include <string>
-#include <string.h>
+#include <limits>
 #include <vector>
-#include <time.h>
-#include <cmath>
 #include <random>
-#include <stdio.h>
+#include <algorithm>
+#include <cstring>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
-#include <limits>
-#include <chrono>
+#include "student.h"
 
 
-const std::string erroras = "Kazkas netaip su tavo ivestais duomenimis!";
+using std::cout;
+using std::endl;
+using std::cin;
+using std::string;
+using std::vector;
+using std::ifstream;
+using std::ofstream;
+using std::istringstream;
 
-bool all_letters(std::string);
-bool is_digits(const std::string &str);
-std::string convert_to_proper_format (std::string text);
-void new_line ();
-double vidurkis (std::vector<int>, int);
-double mediana (std::vector<int>, int);
-void spausdinimas (int, std::vector<Studentas>, int);
-void rikiavimas (std::vector<Studentas>, int);
-bool skola(const Studentas & i);
-std::vector<Studentas> rusiavimas (std::vector<Studentas>&);
+const string wrongNumber = "Netinkamas skaicius! Pabandyk dar karta: ";
+
+int choiceOfInput ();
+int calculationChoice();
+inline bool isLetters(const string);
+inline void notNumber ();
+inline double average (vector<int>);
+inline double median (vector<int>);
+void addStudents (vector<Studentas>&, const int);
+void sortByName (vector<Studentas>&);
+int involution (int, int);
+void generateStudents (const string, const int);
+void printStudents (vector<Studentas>&,vector<Studentas>&,  const int, string = "vargsai.txt", string = "kieti.txt");
+inline bool fileExists (const string);
+void readData (vector<Studentas>&, const string, bool = false);
+inline bool debt(const Studentas&);
+vector<Studentas> sortByMark (vector<Studentas>&);
+
 
 #endif
-
