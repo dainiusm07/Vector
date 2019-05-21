@@ -1,22 +1,111 @@
-# Duomenu apdorojimas
-# Kaip paleisti:
-+ Susikompiliuoti naudojant makefile t.y parasius komanda "make run" i komandine eilute.
-+ Paleisti programa. (defaultinis pavadinimas - test)
-# v0.1
-+ Visu duomenu ivedimas ir skaiciavimas, studentu sk - neribotas, duomenis vedami iki tol kol vartotojas nusprendzia sustoti, su pazymiais viskas taip pat.
-+ Prideta papildoma funkcija (jei vartotojas tarkim varda ir pavarde paraso taip - vARDenis PAVARDEnis. Programa issaugos - Vardenis Pavardenis)
-# v0.2
-+ Prideta galimybe skaityti is failo - kursiokai.txt
-+ Surusiavimas pagal vardus, jei vardai lygus - pavardes
-# v0.3
-+ Visos naudojamos funkcijos atskirame .cpp faile
-+ Panaudojas try-catch
-# v0.4
-+ Prideta galimybe susigeneruoti sabloniniu vardu ir pavardziu spartos analizei atlikti.
-+ Rusiavimas tu sugeneruotu duomenu i failus vargsai.txt ir kieti.txt
-# v0.5
-+ Programa pateikta 3 variantais t.y naudojant skirtingus konteinerius - vector,deque ir list.
-# v1
-+ Programa padaryta pagal 2 strategija.
-+ Pateikti 3 jos variantai.
-+ Pamatytas zenklus skirtumas tarp vector,deque ir list. Vector pasirodė prasčiausiai, deque kiek geriau, o list greitesnis uz juos apie 20 kartu.
+# Vector
+## Self-made vector class
+
+### 1 - palyginimas.
+Rezultatai butu tokie:
+```
+-----------------------------
+Originalus vectorius!
+
+!= testas
+Vectoriai nelygus!
+
+= testas
+Vectoriai lygus!
+
+size() testas
+100
+
+front() testas
+2
+
+resize(5) testas
+Dabar size() rezultatas - 5
+
+-----------------------------
+Mano vectorius!
+
+!= testas
+Vectoriai nelygus!
+
+= testas
+Vectoriai lygus!
+
+size() testas
+100
+
+front() testas
+2
+
+resize(5) testas
+Dabar size() rezultatas - 5
+```
+Abejuose atvejuose sukuriami 2 vectoriai, tarkim v1 ir v1_compare.
+v1 vectoriaus dydis pakeiciamas i 100 ir kiekvienam elementui priskiriamas skaicius 2.
+
+**1 testas:**
+
+v1 != v1_compare
+
+**2 testas:**
+
+v1.compare = v1
+
+Ir tada atliekamas 1 testas pakartotinai.
+
+
+**3 testas:**
+
+v1.size()
+
+
+**4 testas:**
+
+v1.front()
+
+
+**5 testas:**
+
+v1.resize(5)
+
+Ir tada pakartojamas 3 testas.
+
+
+**P.S.** Norint pasileisti sita testa paciam uztenka i komandine eilute parasyti ```make vector```, o susibuildinus pasileisti ```test``` faila.
+
+### 2 - spartumo analize.
+|   Elementu skaicius   |   Originalus vectorius   |   Mano vectorius   |
+| ------------- |:-------------:| -----:|
+| 10000 | 0.0009987 sec. |0 sec. |
+| 100000 | 0.0029957 sec. | 0.0020012 sec. |
+| 1000000 | 0.0279792 sec. | 0.0159929 sec. |
+| 10000000 | 0.277827 sec. | 0.172917 sec. |
+| 100000000 | 2.69737 sec. | 1.59538 sec. |
+
+### 3 - atminties perskirstymas.
+ ```
+ Orig vektorius - 3.41092
+ Jo atiminties perskirstymu skaicius - 27
+
+ Mano vektorius - 2.23562
+ Jo atiminties perskirstymu skaicius - 27
+ ```
+ Atminties perskirstymu ivyko lygiai tiek pat kiek originaliam vectoriui.
+ 
+ ### 4 - mano vectorius 3 darbe.
+ Viskas veikia!
+
+ Norint isitikinti paciam i komandine eilute reikia parasyti ```make run```, susibuildinus pasileisti ```test``` faila.
+ 
+ Spartos atzvilgiu mano vectorius pasirode kiek greitesnis, taciau tokio zenklaus skirtumo kaip 2 punkte (spartos analizei) nera.
+ 
+ ```std::vector uztruko - 2.60471```
+ 
+ ```Vector uztruko - 2.55442```
+ 
+ **Laikas susideda is _sugeneravimo_, ir _spausdinimo_ i faila, taip pat _skaitymo_ is to failo, ir _rusiavimo_.**
+ 
+ 
+
+
+
