@@ -1,7 +1,7 @@
 # Vector
 ## Self-made vector class
 
-### 1 - palyginimas.
+## 1 - palyginimas.
 Rezultatai butu tokie:
 ```
 -----------------------------
@@ -73,7 +73,7 @@ Ir tada pakartojamas 3 testas.
 
 **P.S.** Norint pasileisti sita testa paciam uztenka i komandine eilute parasyti ```make vector```, o susibuildinus pasileisti ```test``` faila.
 
-### 2 - spartumo analize.
+## 2 - spartumo analize.
 |   Elementu skaicius   |   Originalus vectorius   |   Mano vectorius   |
 | ------------- |:-------------:| -----:|
 | 10000 | 0.0009987 sec. |0 sec. |
@@ -82,7 +82,7 @@ Ir tada pakartojamas 3 testas.
 | 10000000 | 0.277827 sec. | 0.172917 sec. |
 | 100000000 | 2.69737 sec. | 1.59538 sec. |
 
-### 3 - atminties perskirstymas.
+## 3 - atminties perskirstymas.
  ```
  Orig vektorius - 3.41092
  Jo atiminties perskirstymu skaicius - 27
@@ -92,7 +92,7 @@ Ir tada pakartojamas 3 testas.
  ```
  Atminties perskirstymu ivyko lygiai tiek pat kiek originaliam vectoriui.
  
- ### 4 - mano vectorius 3 darbe.
+ ## 4 - mano vectorius 3 darbe.
  Viskas veikia!
 
  Norint isitikinti paciam i komandine eilute reikia parasyti ```make run```, susibuildinus pasileisti ```test``` faila.
