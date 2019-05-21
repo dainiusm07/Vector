@@ -84,11 +84,13 @@ inline double median (vector<int> temp) {
          return 1.0*(temp[n/2]);
 }
 
-void addStudents (vector<Studentas>& A, const int calculation) {
+void addStudents (Vector <Studentas>& A, const int calculation) {
     int studentNumber = 0, check = 1, tempNumber;
     string tempString;
     while (check == 1){
+        cout << "nera";
         A.push_back(Studentas());
+        cout << "yra";
         cout << endl;
         cout << "Ivesk studento varda: ";
         cin >> tempString;
@@ -206,7 +208,7 @@ void addStudents (vector<Studentas>& A, const int calculation) {
     }
 }
 
-void sortByName (vector<Studentas>& A) {
+void sortByName (Vector<Studentas>& A) {
     for (int i=0;i<A.size();i++)
         for(int j=i;j<A.size();j++)
             if(strcmp(A[i].GetVardas().c_str(),A[j].GetVardas().c_str())>0) // Tikrina vardus
@@ -261,7 +263,7 @@ void generateStudents (const string filename, const int homeworks){
     toFile.close();
 }
 
-void printStudents (vector<Studentas>& A, vector<Studentas>& vargsai, const int printMethod, string poor, string cool){
+void printStudents (Vector<Studentas>& A, Vector<Studentas>& vargsai, const int printMethod, string poor, string cool){
     if (A.size()>0){ 
         int max_name=7, max_lastname=9; // Pradzioj zodziai Vardas ir Pavarde yra didziausi
 
@@ -297,7 +299,7 @@ void printStudents (vector<Studentas>& A, vector<Studentas>& vargsai, const int 
             ofstream vargsas (poor);
             ofstream kietas (cool);
 
-            vector<Studentas>::size_type i = 0;
+            Vector<Studentas>::size_type i = 0;
             while (i != vargsai.size()){
                 vargsas << vargsai[i] << endl;
                 i++;
@@ -319,7 +321,7 @@ inline bool fileExists (const string name) { //Tikrina ar failas egzistuoja
     return f.good();
 }
 
-void readData (vector<Studentas>& A, const string filename, bool skipCheck) {
+void readData (Vector<Studentas>& A, const string filename, bool skipCheck) {
     if(fileExists(filename)){
         string line,firstname,lastname;
         int studentNumber=0,tempNumber;
@@ -365,10 +367,17 @@ inline bool debt(const Studentas & i){
     return (i < 5);
 }
 
-vector<Studentas> sortByMark (vector<Studentas>& A){
-    vector<Studentas>::iterator it = std::stable_partition(A.begin(), A.end(), debt);
-    vector<Studentas> vargsai(it, A.end());
-    A.erase(it, A.end());
+Vector<Studentas> sortByMark (Vector<Studentas>& A){
+    Vector<Studentas>::iterator it = std::stable_partition(A.begin(), A.end(), debt);
+    Vector<Studentas> vargsai;
+    int count = 1;
+    while(*it != A[A.size()-1]){
+        vargsai.push_back(*it);
+        it++;
+        count++;
+    }
+    A.resize(A.size() - count);
+
 
     return vargsai;
 }

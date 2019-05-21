@@ -1,8 +1,8 @@
 #include "header.h"
 
-int main () {
-    vector<Studentas> A,vargsai;
 
+int main () {
+    Vector<Studentas> A, vargsai;
     const int chosenInput = choiceOfInput(); // Pasirinkimas kaip vesti duomenis
 
     if (chosenInput == 1) { // Pasirinko ivesti duomenis paciam
