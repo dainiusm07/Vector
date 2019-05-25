@@ -369,15 +369,9 @@ inline bool debt(const Studentas & i){
 
 Vector<Studentas> sortByMark (Vector<Studentas>& A){
     Vector<Studentas>::iterator it = std::stable_partition(A.begin(), A.end(), debt);
-    Vector<Studentas> vargsai;
-    int count = 1;
-    while(*it != A[A.size()-1]){
-        vargsai.push_back(*it);
-        it++;
-        count++;
-    }
-    A.resize(A.size() - count);
+    Vector<Studentas> vargsai(it,A.end());
 
+    A.erase(it, A.end());
 
     return vargsai;
 }
