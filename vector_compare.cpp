@@ -1,70 +1,30 @@
 #include "vector.h"
 
 int main () {
-    cout << endl;
-    //Orig
-    vector<int> v1, v1_compare;
-    v1.assign(100,2);
+    int size = 10000000;
+    Vector <int> a(size,1);
+    Vector <int> b(size,2);
+    Vector <int> c;
+    c = a + b;
+    std::cout << "c = a + b rezultatas: " << c[100000] << std::endl; // Patikriname ar tikrai sudėjo
 
-    cout << "-----------------------------" << endl;
-    cout << "Originalus vectorius!" << endl << endl;
-    cout << "!= testas" << endl;
-    if (v1 != v1_compare)
-        cout << "Vectoriai nelygus!" << endl << endl;
-    else
-        cout << "Vectoriai lygus!" << endl << endl;
-    
-    cout << "= testas" << endl;
-    v1_compare = v1;
-    if (v1 != v1_compare)
-        cout << "Vectoriai nelygus!" << endl << endl;
-    else
-        cout << "Vectoriai lygus!" << endl << endl;
-    
-    cout << "size() testas" << endl;
-    cout << v1.size() << endl << endl;
+    a.push_back(100);
 
-    cout << "front() testas" << endl;
-    cout << v1.front() << endl << endl;
+    std::cout << std::endl;
+    std::cout <<"a.capacity(): " <<  a.capacity() << std::endl;
+    std::cout <<"a.size(): " <<  a.size() << std::endl;
+    Vector<int> v(4, 1);
+    // std::cout << "v[5]:" << v[5]<< endl;
+    // std::cout << "v.at(5):" <<v.at(5)<< endl;
+    //Vector<int> h(9999999999999);
 
-    cout << "resize(5) testas" << endl;
-    v1.resize(5);
-    cout << "Dabar size() rezultatas - " << v1.size() << endl << endl;
+    a.shrink_to_fit();
 
-    v1.clear();
-    v1_compare.clear();
+    std::cout <<"po funkcijos shrink_to_fit: " << std::endl;
+    std::cout <<"a.capacity(): " <<  a.capacity() << std::endl;
+    std::cout <<"a.size(): " <<  a.size() << std::endl;
 
-    //Mano
-    Vector<int> v2, v2_compare;
-    v2.assign(100,2);
 
-    cout << "-----------------------------" << endl;
-    cout << "Mano vectorius!" << endl << endl;
-    cout << "!= testas" << endl;
-    if (v2 != v2_compare)
-        cout << "Vectoriai nelygus!" << endl << endl;
-    else
-        cout << "Vectoriai lygus!" << endl << endl;
-    
-    cout << "= testas" << endl;
-    v2_compare = v2;
-    if (v2 != v2_compare)
-        cout << "Vectoriai nelygus!" << endl << endl;
-    else
-        cout << "Vectoriai lygus!" << endl << endl;
-    
-    cout << "size() testas" << endl;
-    cout << v2.size() << endl << endl;
-
-    cout << "front() testas" << endl;
-    cout << v2.front() << endl << endl;
-
-    cout << "resize(5) testas" << endl;
-    v2.resize(5);
-    cout << "Dabar size() rezultatas - " << v2.size() << endl << endl;
-
-    v2.clear();
-    v2_compare.clear();
 
     return 0;
 }

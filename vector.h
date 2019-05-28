@@ -26,10 +26,11 @@ class Vector{
     for (int i = 0; i < size; i++)
         vector_elem[i] = elem;
     };
-    Vector(Vector&& temp) : vector_size { temp.vector_size }, vector_cap { temp.vector_cap } {
+    Vector (Vector&& temp) : vector_size { temp.vector_size }, vector_cap { temp.vector_cap } {
         vector_elem = temp.vector_elem;
         temp.vector_elem = nullptr;
         temp.vector_size = temp.vector_cap = 0;
+        std::cout << "A move constructor" << std::endl;
     };
     Vector (const Vector<T>& temp){
     vector_size = temp.vector_size;
@@ -37,6 +38,8 @@ class Vector{
     vector_elem = new T[vector_size];
     for (int i = 0; i < vector_size; i++)
         vector_elem[i] = temp.vector_elem[i];
+
+    std::cout << "A copy constructor" << std::endl;
     };
     Vector (iterator first, iterator last) {
         vector_size = vector_cap = 0;
@@ -99,6 +102,14 @@ class Vector{
         vector_elem = new_elem;
         vector_size = temp.vector_size;
         vector_cap = temp.vector_cap;
+        return *this;
+    }
+    Vector& operator+(const Vector& temp) {
+
+        if (vector_size != temp.vector_size) throw std::out_of_range("Vector sizes are different!");
+
+        for (auto i = 0; i != vector_size; i++)
+            vector_elem[i] += temp.vector_elem[i];
         return *this;
     }
 
@@ -180,7 +191,7 @@ class Vector{
     void reserve (size_t n){
         if(vector_cap < n) {
             iterator elem = new T[n];
-            std::move(&vector_elem[0],&vector_elem[vector_size - 1], elem);
+            std::move(&vector_elem[0],&vector_elem[vector_size], elem);
             vector_cap = n;
             if (n == 2)
                 delete vector_elem;
@@ -252,6 +263,7 @@ class Vector{
         if (vector_size<vector_cap){
             std::move(&vector_elem[pos],&vector_elem[vector_size],&vector_elem[pos+1]);
             vector_elem[pos] = elem;
+            vector_size++;
         }
         else {
             reserve(2 * vector_cap);
